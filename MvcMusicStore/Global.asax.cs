@@ -4,7 +4,9 @@ using MvcMusicStore.Logging;
 using MvcMusicStore.Proxy;
 using StackExchange.Profiling;
 using System;
+using System.Configuration;
 using System.Diagnostics.Tracing;
+using System.Web.Configuration;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -23,13 +25,14 @@ namespace MvcMusicStore
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            //EnableLoggingListener();
+            EnableLoggingListener();
         }
 
         private void EnableLoggingListener()
         {
+            string storageConnectionString = ConfigurationManager.AppSettings["AzureStorageAccount"];
             listener = new ObservableEventListener();
-            listener.LogToWindowsAzureTable("CustomEvents", "DefaultEndpointsProtocol=https;AccountName=musiccloudstorage;AccountKey=...");
+            listener.LogToWindowsAzureTable("MvcMusicStore", storageConnectionString);
             //listener.EnableEvents(AuditEvent.Log, EventLevel.LogAlways, Keywords.All);
             listener.EnableEvents(ErrorEvent.Log, EventLevel.LogAlways, Keywords.All);
         }

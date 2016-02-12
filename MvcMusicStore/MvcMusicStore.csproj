@@ -313,6 +313,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="GlimpseSecurityPolicy.cs" />
+    <Compile Include="Logging\MvcMusicStoreEventSource.cs" />
     <Compile Include="Logging\Telemetry.cs" />
     <Compile Include="ServiceProxy\Backendproxy.cs" />
     <Compile Include="Controllers\AccountController.cs" />
