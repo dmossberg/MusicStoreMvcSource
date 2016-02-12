@@ -6,7 +6,6 @@ using StackExchange.Profiling;
 using System;
 using System.Configuration;
 using System.Diagnostics.Tracing;
-using System.Web.Configuration;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -26,6 +25,7 @@ namespace MvcMusicStore
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             EnableLoggingListener();
+            MvcMusicStoreEventSource.Log.Startup();
         }
 
         private void EnableLoggingListener()
@@ -34,7 +34,8 @@ namespace MvcMusicStore
             listener = new ObservableEventListener();
             listener.LogToWindowsAzureTable("MvcMusicStore", storageConnectionString);
             //listener.EnableEvents(AuditEvent.Log, EventLevel.LogAlways, Keywords.All);
-            listener.EnableEvents(ErrorEvent.Log, EventLevel.LogAlways, Keywords.All);
+            //listener.EnableEvents(ErrorEvent.Log, EventLevel.LogAlways, Keywords.All);
+            listener.EnableEvents("MvcMusicStore", EventLevel.LogAlways, Keywords.All);
         }
 
         protected void Application_End()
