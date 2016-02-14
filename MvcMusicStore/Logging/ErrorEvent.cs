@@ -31,8 +31,8 @@ namespace MvcMusicStore.Logging
             this.WriteEvent(1, type, message, stackTrace);
         }
 
-        [Event(2, Message = "unhandled error.", Keywords = Keywords.Unknown, Level = EventLevel.Error)]
-        internal void ExcepcionNoManejada(string type, string message, string stackTrace)
+        [Event(2, Message = "Unhandled error", Keywords = Keywords.Unknown, Level = EventLevel.Error)]
+        internal void UnhandledException(string type, string message, string stackTrace)
         {
             this.WriteEvent(2, type, message, stackTrace);
         }

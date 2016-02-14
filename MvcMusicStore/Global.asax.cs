@@ -15,7 +15,7 @@ namespace MvcMusicStore
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        private ObservableEventListener listener;
+        private ObservableEventListener listenerAzure, listenerConsole;
 
         protected void Application_Start()
         {
@@ -25,28 +25,31 @@ namespace MvcMusicStore
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             EnableLoggingListener();
-            MvcMusicStoreEventSource.Log.Startup();
+            MusicStoreEventSource.Log.Startup();
         }
 
         private void EnableLoggingListener()
         {
             string storageConnectionString = ConfigurationManager.AppSettings["AzureStorageAccount"];
-            listener = new ObservableEventListener();
-            listener.LogToWindowsAzureTable("MvcMusicStore", storageConnectionString);
-            //listener.EnableEvents(AuditEvent.Log, EventLevel.LogAlways, Keywords.All);
-            //listener.EnableEvents(ErrorEvent.Log, EventLevel.LogAlways, Keywords.All);
-            listener.EnableEvents("MvcMusicStore", EventLevel.LogAlways, Keywords.All);
+            listenerAzure = new ObservableEventListener();
+            listenerAzure.LogToWindowsAzureTable("MvcMusicStore", storageConnectionString);
+            listenerAzure.EnableEvents(MusicStoreEventSource.Log, EventLevel.LogAlways, Keywords.All);
+            
+            listenerConsole = new ObservableEventListener();
+            listenerConsole.LogToConsole();
+            listenerConsole.EnableEvents(MusicStoreEventSource.Log, EventLevel.LogAlways, Keywords.All);
         }
 
         protected void Application_End()
         {
+            MusicStoreEventSource.Log.ShutDown();
             DisableLoggingListener();
         }
 
         private void DisableLoggingListener()
         {
             //listener.DisableEvents(AuditEvent.Log);
-            listener.Dispose();
+            listenerAzure.Dispose();
         }
 
         protected void Application_Error(object sender, EventArgs e)
@@ -64,14 +67,14 @@ namespace MvcMusicStore
             switch( exceptionType )
             {
                 case "System.Data.SqlClient.SqlException" :
-                    ErrorEvent.Log.DatabaseError( exceptionType, exceptionMessage, stackTrace);
+                    MusicStoreEventSource.Log.DatabaseError(exceptionType, exceptionMessage, stackTrace);
                     break;
                 case "MvcMusicStore.Proxy.ServiceCallException":
                     string serviceUrl = ((ServiceCallException)exception).ServiceUrl;
-                    ErrorEvent.Log.ServiceCallError(exceptionType, exceptionMessage, stackTrace, serviceUrl);
+                    MusicStoreEventSource.Log.ServiceCallError(exceptionType, exceptionMessage, stackTrace, serviceUrl);
                     break;
                 default:
-                    ErrorEvent.Log.ExcepcionNoManejada(exceptionType, exceptionMessage, stackTrace);
+                    MusicStoreEventSource.Log.UnhandledException(exceptionType, exceptionMessage, stackTrace);
                     break;
             }
             //Server.ClearError();
