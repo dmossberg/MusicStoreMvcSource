@@ -66,9 +66,9 @@ namespace MvcMusicStore.Logging
 
         [Event(100, Message = "Unhandled exception: {0}",
         Task = Tasks.Page, Keywords = Keywords.Diagnostic, Level = EventLevel.Error)]
-        internal void UnhandledException(string type, string message, string stacktrace)
+        internal void UnhandledException(string type, string message, string stackTrace)
         {
-            this.WriteEvent(100, type, message, stacktrace);
+            this.WriteEvent(100, type, message, stackTrace);
         }
 
         [Event(101, Message = "Database access error", Keywords = Keywords.DataBase, Level = EventLevel.Error)]
