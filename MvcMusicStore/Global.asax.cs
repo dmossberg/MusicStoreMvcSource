@@ -25,7 +25,7 @@ namespace MvcMusicStore
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             EnableLoggingListener();
-            MusicStoreEventSource.Log.Startup();
+            MusicStoreEventSource.Log.Startup(Environment.MachineName);
         }
 
         private void EnableLoggingListener()
@@ -34,7 +34,8 @@ namespace MvcMusicStore
             listenerAzure = new ObservableEventListener();
             listenerAzure.LogToWindowsAzureTable("MvcMusicStore", storageConnectionString);
             listenerAzure.EnableEvents(MusicStoreEventSource.Log, EventLevel.LogAlways, Keywords.All);
-            
+
+
             listenerConsole = new ObservableEventListener();
             listenerConsole.LogToConsole();
             listenerConsole.EnableEvents(MusicStoreEventSource.Log, EventLevel.LogAlways, Keywords.All);
@@ -42,7 +43,7 @@ namespace MvcMusicStore
 
         protected void Application_End()
         {
-            MusicStoreEventSource.Log.ShutDown();
+            MusicStoreEventSource.Log.ShutDown(Environment.MachineName);
             DisableLoggingListener();
         }
 

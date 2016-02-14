@@ -39,18 +39,18 @@ namespace MvcMusicStore.Logging
             this.WriteEvent(1, message);
         }
 
-        [Event(2, Message = "Starting up.", Keywords = Keywords.Perf,
+        [Event(2, Message = "Starting up in: {0}", Keywords = Keywords.Perf,
         Level = EventLevel.Informational)]
-        internal void Startup()
+        internal void Startup(string servername)
         {
-            this.WriteEvent(2);
+            this.WriteEvent(2, servername);
         }
 
-        [Event(3, Message = "Shutting down.", Keywords = Keywords.Perf,
+        [Event(3, Message = "Shutting down in: {0}", Keywords = Keywords.Perf,
         Level = EventLevel.Informational)]
-        internal void ShutDown()
+        internal void ShutDown(string servername)
         {
-            this.WriteEvent(3);
+            this.WriteEvent(3, servername);
         }
 
         [Event(4, Message = "Loading page {1} activityID={0}",
