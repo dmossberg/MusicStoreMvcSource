@@ -1,5 +1,7 @@
-﻿using MvcMusicStore.Models;
+﻿using Microsoft.ApplicationInsights;
+using MvcMusicStore.Models;
 using MvcMusicStore.ServiceProxy;
+using System;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +13,8 @@ namespace MvcMusicStore.Controllers
     {
         MusicStoreEntities storeDB = new MusicStoreEntities();
         MusicStoreEntities storeDB2 = new MusicStoreEntities();
+
+        TelemetryClient telemetry = new TelemetryClient();
         
         //
         // GET: /Store/
@@ -47,7 +51,18 @@ namespace MvcMusicStore.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
-            await MusicStoreAPIClient.retrieveFromCache();
+            var now = DateTime.Now;
+            var timer = System.Diagnostics.Stopwatch.StartNew();
+            try
+            {
+                await MusicStoreAPIClient.retrieveFromCache();
+            }
+            finally
+            {
+                timer.Stop();
+                telemetry.TrackDependency("MusicStoreAPIClient", "retrieveFromCache",  now, timer.Elapsed, true);
+            }                   
+
             var album = storeDB.Albums.Find(id);
             //AuditEvent.Log.DetailsCalled(id);     
            
