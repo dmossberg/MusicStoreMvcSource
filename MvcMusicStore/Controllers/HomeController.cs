@@ -1,5 +1,4 @@
-﻿using Microsoft.ApplicationInsights;
-using MvcMusicStore.Models;
+﻿using MvcMusicStore.Models;
 using StackExchange.Profiling;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +13,9 @@ namespace MvcMusicStore.Controllers
         // GET: /Home/
 
         MusicStoreEntities storeDB = new MusicStoreEntities();
-        TelemetryClient telemetry = new TelemetryClient();
 
         public ActionResult Index()
         {
-            telemetry.TrackEvent("Store visited");
-
             // Get most popular albums
             var albums = GetTopSellingAlbums(5);
             //string value = BackEndProxy.getValue().Result;
