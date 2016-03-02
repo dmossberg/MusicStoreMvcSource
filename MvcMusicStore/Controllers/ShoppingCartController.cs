@@ -1,4 +1,5 @@
-﻿using MvcMusicStore.Models;
+﻿using Microsoft.ApplicationInsights;
+using MvcMusicStore.Models;
 using MvcMusicStore.ViewModels;
 using System.Linq;
 using System.Web.Mvc;
@@ -8,6 +9,7 @@ namespace MvcMusicStore.Controllers
     public class ShoppingCartController : Controller
     {
         MusicStoreEntities storeDB = new MusicStoreEntities();
+        TelemetryClient telemetry = new TelemetryClient();
 
         //
         // GET: /ShoppingCart/
@@ -33,6 +35,8 @@ namespace MvcMusicStore.Controllers
         public ActionResult AddToCart(int id)
         {
 
+            telemetry.TrackEvent("Album added to cart");
+
             // Retrieve the album from the database
             var addedAlbum = storeDB.Albums
                 .Single(album => album.AlbumId == id);
@@ -52,6 +56,8 @@ namespace MvcMusicStore.Controllers
         [HttpPost]
         public ActionResult RemoveFromCart(int id)
         {
+            telemetry.TrackEvent("Album removed from cart");
+
             // Remove the item from the cart
             var cart = ShoppingCart.GetCart(this.HttpContext);
 

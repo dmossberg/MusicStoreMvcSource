@@ -51,6 +51,8 @@ namespace MvcMusicStore.Controllers
 
         public async Task<ActionResult> Details(int id)
         {
+            telemetry.TrackEvent("Album Detail Viewed");
+
             var now = DateTime.Now;
             var timer = System.Diagnostics.Stopwatch.StartNew();
             try
@@ -61,6 +63,7 @@ namespace MvcMusicStore.Controllers
             {
                 timer.Stop();
                 telemetry.TrackDependency("MusicStoreAPIClient", "retrieveFromCache",  now, timer.Elapsed, true);
+                
             }                   
 
             var album = storeDB.Albums.Find(id);
