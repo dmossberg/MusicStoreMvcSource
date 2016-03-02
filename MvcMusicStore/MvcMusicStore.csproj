@@ -467,19 +467,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Web.config.txt">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web.config.Debug.txt">
-      <DependentUpon>Web.config.txt</DependentUpon>
-    </Content>
-    <Content Include="Web.config.DEV.txt">
-      <DependentUpon>Web.config.txt</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web.config.Release.txt">
-      <DependentUpon>Web.config.txt</DependentUpon>
-    </Content>
     <None Include="Web.DEV.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

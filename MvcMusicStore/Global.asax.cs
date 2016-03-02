@@ -16,6 +16,7 @@ namespace MvcMusicStore
     public class MvcApplication : System.Web.HttpApplication
     {
         private ObservableEventListener listenerAzure, listenerConsole;
+        TelemetryClient telemetry;
 
         protected void Application_Start()
         {
@@ -30,12 +31,13 @@ namespace MvcMusicStore
 
         private void EnableLoggingListener()
         {
+            telemetry = new TelemetryClient();
+
             string storageConnectionString = ConfigurationManager.AppSettings["AzureStorageAccount"];
             listenerAzure = new ObservableEventListener();
             listenerAzure.LogToWindowsAzureTable("MvcMusicStore", storageConnectionString);
             listenerAzure.EnableEvents(MusicStoreEventSource.Log, EventLevel.LogAlways, Keywords.All);
-
-
+            
             listenerConsole = new ObservableEventListener();
             listenerConsole.LogToConsole();
             listenerConsole.EnableEvents(MusicStoreEventSource.Log, EventLevel.LogAlways, Keywords.All);
@@ -55,9 +57,10 @@ namespace MvcMusicStore
 
         protected void Application_Error(object sender, EventArgs e)
         {
-            TelemetryClient telemetry = new TelemetryClient();
-
             var exception = Server.GetLastError();
+
+            telemetry.TrackException(exception);
+
             while (exception.InnerException != null)
                 exception = exception.InnerException;
 
