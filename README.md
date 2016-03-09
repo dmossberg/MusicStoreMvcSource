@@ -3,6 +3,7 @@ Performance workshop demo application
 
 To get this application working, you need to add two sections to the MvcMusicStore project web.config file, the "AzureStorageAccount" app setting where the SLAB logging will be written to, and the database "MusicStoreEntities" where the EF model data is stored:
 
+```
   <appSettings>
     ...
     <add key="AzureStorageAccount" value="DefaultEndpointsProtocol=https;AccountName=musiccloudstorage;AccountKey=****" />
@@ -11,10 +12,11 @@ To get this application working, you need to add two sections to the MvcMusicSto
   <connectionStrings>
     <add name="MusicStoreEntities" providerName="System.Data.SqlClient" connectionString="Data Source=musicstore.database.windows.net;Initial Catalog=MusicStoreDB;Persist Security Info=True;User ID=****;Password=****" />
   </connectionStrings>
-  
+```  
 
 To create the database, you can use the following SQL Script:
-  
+
+```  
 USE [MvcMusicStore]
 GO
 ALTER TABLE [dbo].[Album] DROP CONSTRAINT [FK__Album__ArtistId__276EDEB3]
@@ -632,3 +634,4 @@ REFERENCES [dbo].[Album] ([AlbumId])
 GO
 ALTER TABLE [dbo].[OrderDetail] CHECK CONSTRAINT [FK_InvoiceLine_Album]
 GO
+```
